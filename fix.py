@@ -99,6 +99,7 @@ def fixCardWithoutNote(self, problems):
 def odueToZero(ids):
     self.db.execute("update cards set odue=0 where id in "+
                       ids2str(ids))
+
 def fixOdueType1(self, problems):
      (template(
          "select id,nid from cards where odue > 0 and type=1 and not odid",

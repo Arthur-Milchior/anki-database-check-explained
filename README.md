@@ -19,6 +19,9 @@ this. Hence, this add-on change message sent by the methods used to
 check and to fix the database, so that it explains exactly what it
 does.
 
+More information on the error messages can be found on
+https://github.com/Arthur-Milchior/anki/blob/master/documentation/DB_Check.md
+
 ### Checking what anki forgot to check
 There are kind(s) of error(s) that anki does not check. This add-on
 also check and correct those kind of errors. The following error(s)
