@@ -42,7 +42,11 @@ now, it's only: checking whether a note has a duplicate card.
 
 ## Internal
 In the class ```anki.collection._Collection```, it changes the two
-methods ```basicCheck``` and ```fixIntegrity```.
+methods:
+* ```basicCheck```, a method used thrice during sync to check whether
+everything is ok or whether there is an inconsistency. 
+* ```fixIntegrity```, the method which is used when clicking on "Check
+Database". 
 
 ## Version 2.0
 None
