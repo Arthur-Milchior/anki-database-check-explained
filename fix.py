@@ -64,14 +64,14 @@ def fixWrongNumberOfField(self, problems):
     for m in self.models.all():
         # notes with invalid field count
         l = self.db.all(
-            "select id, flds, mid from notes where mid = ?", m['id'])
+            "select id, flds from notes where mid = ?", m['id'])
         ids = []
-        for id, flds, mid in l:
+        for id, flds in l:
             nbFieldNote = flds.count("\x1f") + 1
             nbFieldModel = len(m['flds'])
             if nbFieldNote != nbFieldModel:
                 ids.append(id)
-                problems.append(f"""Note {nid} with fields «{flds}» has {nbFieldNote} fields while its model {m['name']} has {nbFieldModel} fields""")
+                problems.append(f"""Note {id} with fields «{flds}» has {nbFieldNote} fields while its model {m['name']} has {nbFieldModel} fields""")
         if ids:
             problems.append(
                 ngettext("Deleted %d note with wrong field count.",
