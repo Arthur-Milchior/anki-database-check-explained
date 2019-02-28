@@ -56,5 +56,5 @@ Key         |Value
 Copyright   | Arthur Milchior <arthur@milchior.fr>
 Based on    | Anki code by Damien Elmes <anki@ichi2.net>
 License     | GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
-Source in   | https://github.com/Arthur-Milchior/anki-database-check-explained.git
-Addon number| [NNNNNNNNNNNN](https://ankiweb.net/shared/info/NNNNNNNNNNNN)
+Source in   | https://github.com/Arthur-Milchior/anki-database-check-explained
+Addon number| [1135180054](https://ankiweb.net/shared/info/1135180054)
