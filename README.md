@@ -31,9 +31,17 @@ how this could occur without having a single add-on installed.
 
 ## Warning
 This add-on is incompatible with add-on
-[12287769](https://ankiweb.net/shared/info/12287769) «Explain
+* [12287769](https://ankiweb.net/shared/info/12287769) «Explain
 deletion». This add-on ensure that the file ```deleted.txt``` state
 why notes are deleted.
+* [Quicker Anki: 802285486](https://ankiweb.net/shared/info/802285486)
+  which makes some operation quicker.
+
+
+Please instead use-addon
+[777545149](https://ankiweb.net/shared/info/777545149) which merges
+those three add-ons
+
 
 With one exception, this add-on does not actually edit the
 database. All editions are done by anki original code. The exception
