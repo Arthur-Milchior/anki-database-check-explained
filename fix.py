@@ -4,6 +4,7 @@ from anki.lang import _, ngettext
 from anki.utils import ids2str, intTime
 from aqt import mw
 from anki.cards import Card
+from .config import getUserOption
 import os
 import stat
 
@@ -62,6 +63,19 @@ def fixWrongNumberOfField(self, problems):
 
 
 def fixNoteWithoutCard(self, problems):
+    if getUserOption("Create empty card for empty note"):
+        l = self.db.all("""select id, flds, tags, mid from notes where id not in (select distinct nid from cards)""")
+        for nid, flds, tags, mid in l:
+            note = mw.col.getNote(nid)
+            note.addTag("NoteWithNoCard")
+            note.flush()
+            model = note.model()
+            template0 = model["tmpls"][0]
+            mw.col._newCard(note,template0,mw.col.nextID("pos"))
+            problems.append("No cards in note {} with fields «{}» and tags «{}» of model {}. Adding card 1 and tag «NoteWithNoCard».".format(nid, fld, tags, mid))
+        if l:
+            problems.append("Created %d cards for notes without card"% (len(l)))
+    else:
      (template(
          """select id, flds, tags, mid from notes where id not in (select distinct nid from cards)""",
          "Deleting note {} with fields «{}» and tags «{}» of model {} because it has no card.",
@@ -105,7 +119,7 @@ def atMost1000000Due(self, problems):
                "Fixed %d due card with due too big.",
                "Fixed %d due cards with due too big."
     ))(self, problems)
-    
+
 
 def setNextPos(self):
     # new card position
@@ -134,7 +148,7 @@ def fixFloatIvl(self, problems):
 def fixFloatDue(self, problems):
     (template(
     "select id, due from cards where due != round(due)",
-    "Round the due of card {id} because it was {due} (this is a known bug of schedule v2.",
+    "Round the due of card {} because it was {} (this is a known bug of schedule v2.",
     "Fixed %d cards with v2 scheduler bug.",
     "Fixed %d cards with v2 scheduler bug."))(self, problems)
 

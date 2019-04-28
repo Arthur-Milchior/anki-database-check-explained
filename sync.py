@@ -1,8 +1,9 @@
-from anki.collection import _Collection
 from aqt.sync import SyncManager
+from anki.lang import _
+from aqt.utils import showWarning, showText, tooltip
 
 def _checkFailed(self, event):
-        showWarning(_("""\
+        showWarning(_(f"""\
 Your collection is in an inconsistent state. Please run Tools>\
 Check Database, then sync again.
 This is due to event {event} during sync."""))
@@ -74,4 +75,4 @@ sync again to correct the issue."""))
         elif evt == "recv":
             self.recvBytes = max(self.recvBytes, int(args[0]))
             self._updateLabel()
-_Collection.onEvent = onEvent
+SyncManager.onEvent = onEvent
