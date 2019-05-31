@@ -32,7 +32,7 @@ how this could occur without having a single add-on installed.
 ## Warning
 This add-on is incompatible with add-on
 * [12287769](https://ankiweb.net/shared/info/12287769) «Explain
-deletion». This add-on ensure that the file ```deleted.txt``` state
+deletion». This add-on ensure that the file `deleted.txt` state
 why notes are deleted.
 * [Quicker Anki: 802285486](https://ankiweb.net/shared/info/802285486)
   which makes some operation quicker.
@@ -49,13 +49,13 @@ being the check which are done by this add-on and not by anki. Right
 now, it's only: checking whether a note has a duplicate card.
 
 ## Internal
-In the class ```anki.collection._Collection```, it changes the
+In the class `anki.collection._Collection`, it changes the
 methods:
-* ```basicCheck```, a method used thrice during sync to check whether
+* `basicCheck`, a method used thrice during sync to check whether
 everything is ok or whether there is an inconsistency.
-* ```fixIntegrity```, the method which is used when clicking on "Check
+* `fixIntegrity`, the method which is used when clicking on "Check
 Database".
-* ```_checkFailed```. The new method explain the problem comes from
+* `_checkFailed`. The new method explain the problem comes from
   the server.
 
 ## Version 2.0
