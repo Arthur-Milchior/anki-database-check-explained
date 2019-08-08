@@ -166,6 +166,20 @@ def doubleCard(self, problems):
     if toRemove:
         self.remCards(toRemove)
 
+def checkAutoPlay(self, problems):
+    """check that autoplay is set in all deck object"""
+    for dconf in self.decks.dconf.values():
+        if 'autoplay' not in dconf:
+            dconf['autoplay'] = True
+            self.decks.save(dconf)
+            problems.append(f"Adding some «autoplay» which was missing in deck's option {dconf['name']}")
+    for deck in self.decks.decks.values():
+        if deck['dyn'] and 'autoplay' not in deck:
+            deck['autoplay'] = True
+            self.decks.save(deck)
+            problems.append(f"Adding some «autoplay» which was missing in deck {deck['name']}")
+
+
 
 oldFixIntegrity = _Collection.fixIntegrity
 def fixIntegrity(self):
@@ -189,6 +203,7 @@ def fixIntegrity(self):
                 fixFloatIvl,
                 fixFloatDue,
                 doubleCard,
+                checkAutoPlay,
     ]:
         fun(self,problems)
     # tags
