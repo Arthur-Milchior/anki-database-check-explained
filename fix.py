@@ -7,6 +7,7 @@ from anki.cards import Card
 from .config import getUserOption
 import os
 import stat
+from anki.decks import defaultConf as defaultDeckConf, defaultDynamicDeck, defaultDeck
 
 def integrity(self):
     if self.db.scalar("pragma integrity_check") != "ok":
@@ -166,19 +167,20 @@ def doubleCard(self, problems):
     if toRemove:
         self.remCards(toRemove)
 
-def checkAutoPlay(self, problems):
-    """check that autoplay is set in all deck object"""
-    for dconf in self.decks.dconf.values():
-        if 'autoplay' not in dconf:
-            dconf['autoplay'] = True
-            self.decks.save(dconf)
-            problems.append(f"Adding some «autoplay» which was missing in deck's option {dconf['name']}")
-    for deck in self.decks.decks.values():
-        if deck['dyn'] and 'autoplay' not in deck:
-            deck['autoplay'] = True
-            self.decks.save(deck)
-            problems.append(f"Adding some «autoplay» which was missing in deck {deck['name']}")
-
+def checkDeck(self):
+    """check that all default confs/decks option are set in all deck's related object"""
+    dynDecks = [deck in self.decks.all(sort=False) if deck['dyn']]
+    for paramsSet, defaultParam, what, kind in [(self.decks.dconf.values(), defaultDeckConf, "'s option", "deck configuration"),
+                                                (self.decks.all(sort=False, dyn=False), defaultDeck, "", "standard deck"),
+                                                (dynDecks, defaultDynamicDeck, " (dynamic)", "dynamic deck"),
+                                                (dynDecks, defaultDeckConf, " (dynamic)", "dynamic deck as conf"),
+    ]:
+        for key in defaultParam:
+            for params in paramsSet:
+                if key not in params:
+                    params[key] = defaultParam[key]
+                    self.decks.save(params)
+                    self.problems.append(f"Adding some «{key}» which was missing in deck{what} {params['name']}")
 
 
 oldFixIntegrity = _Collection.fixIntegrity
@@ -203,7 +205,7 @@ def fixIntegrity(self):
                 fixFloatIvl,
                 fixFloatDue,
                 doubleCard,
-                checkAutoPlay,
+                checkDecks,
     ]:
         fun(self,problems)
     # tags
