@@ -167,11 +167,12 @@ def doubleCard(self, problems):
     if toRemove:
         self.remCards(toRemove)
 
-def checkDeck(self):
+def checkDeck(self, problems):
     """check that all default confs/decks option are set in all deck's related object"""
-    dynDecks = [deck in self.decks.all(sort=False) if deck['dyn']]
+    dynDecks = [deck for deck in self.decks.all() if deck['dyn']]
+    standardDecks = [deck for deck in self.decks.all() if not deck['dyn']]
     for paramsSet, defaultParam, what, kind in [(self.decks.dconf.values(), defaultDeckConf, "'s option", "deck configuration"),
-                                                (self.decks.all(sort=False, dyn=False), defaultDeck, "", "standard deck"),
+                                                (standardDecks, defaultDeck, "", "standard deck"),
                                                 (dynDecks, defaultDynamicDeck, " (dynamic)", "dynamic deck"),
                                                 (dynDecks, defaultDeckConf, " (dynamic)", "dynamic deck as conf"),
     ]:
@@ -180,7 +181,7 @@ def checkDeck(self):
                 if key not in params:
                     params[key] = defaultParam[key]
                     self.decks.save(params)
-                    self.problems.append(f"Adding some «{key}» which was missing in deck{what} {params['name']}")
+                    problems.append(f"Adding some «{key}» which was missing in deck{what} {params['name']}")
 
 
 oldFixIntegrity = _Collection.fixIntegrity
@@ -205,7 +206,7 @@ def fixIntegrity(self):
                 fixFloatIvl,
                 fixFloatDue,
                 doubleCard,
-                checkDecks,
+                checkDeck,
     ]:
         fun(self,problems)
     # tags
