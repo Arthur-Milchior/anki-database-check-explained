@@ -31,7 +31,9 @@ forum](https://anki.tenderapp.com/discussions/ankidesktop/32854-two-cards-of-the
 how this could occur without having a single add-on installed.
 * Whether «autoplay» is not set in some deck's option setting. (This
   occured to me, and I don't know why)
-
+* whether two notes have the same GUID. See
+  https://github.com/Arthur-Milchior/anki-unique-GUID to understand
+  why this may occur.
 
 
 ## Warning

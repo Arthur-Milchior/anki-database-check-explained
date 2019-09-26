@@ -183,6 +183,18 @@ def checkDeck(self, problems):
                     self.decks.save(params)
                     problems.append(f"Adding some «{key}» which was missing in deck{what} {params['name']}")
 
+def uniqueGuid(self, problems):
+    lastGuid = None
+    nids = []
+    lastNid = None
+    for guid, nid in mw.col.db.all("select guid, id from notes order by guid"):
+        if lastGuid == guid:
+            mw.col.db.execute("update notes set guid = ? where id = ? ", guid64(), nid)
+            nids.append((nid,lastNid))
+            problems.append(f"The guid of note {nid} has been changed because it used to be the guid of note {lastNid}")
+        lastGuid = guid
+        lastNid = nid
+
 
 oldFixIntegrity = _Collection.fixIntegrity
 def fixIntegrity(self):
@@ -207,6 +219,7 @@ def fixIntegrity(self):
                 fixFloatDue,
                 doubleCard,
                 checkDeck,
+                uniqueGuid,
     ]:
         fun(self,problems)
     # tags
