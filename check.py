@@ -1,7 +1,9 @@
+import sys
+
 from anki.collection import _Collection
 from anki.consts import *
 from anki.utils import ids2str
-import sys
+
 
 def basicCheck(self):
     """True if basic integrity is meet.

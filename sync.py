@@ -1,6 +1,7 @@
-from aqt.sync import SyncManager
 from anki.lang import _
-from aqt.utils import showWarning, showText, tooltip
+from aqt.sync import SyncManager
+from aqt.utils import showText, showWarning, tooltip
+
 
 def _checkFailed(self, event):
         showWarning(_(f"""\

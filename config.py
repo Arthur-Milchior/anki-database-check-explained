@@ -1,4 +1,5 @@
 from aqt import mw
+
 userOption = None
 def getUserOption(key = None, default = None):
     global userOption
