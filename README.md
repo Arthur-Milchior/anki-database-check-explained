@@ -1,37 +1,35 @@
 # Database checker/fixer explained, more fixers
 ## Rationale
-This add-on simultaneously solve two related problems.
+This add-on simultaneously solves two related problems.
 
 ### Meaningful error message
-Sometime, anki warns you that your database has trouble. That you
-should run «Check database» to correct it. I find this quite
-frustrating, because I've no clue what's wrong. And since it may
-happens many time, I would like to understand what's wrong to avoid
-repeating the error. This is especially important for add-on
-developpers, because if our add-ons break the database, it would be
-better to know exactly how it breaks, so that we can correct
-this. Hence, this add-on change message sent by the methods used to
-check and to fix the database, so that it explains exactly what it
-does.
+Sometime, Anki warns you that your database has trouble and that you 
+should run «Check Database» to correct it. I find this quite 
+frustrating, because I've no clue what's wrong. Since it may happen 
+many times, I would like to understand what's wrong to avoid repeating 
+the error. This is especially important for add-on developers, because 
+if our add-ons break the database, it would be better to know exactly 
+how it broke, so that we can correct this. Hence, this add-on changes 
+messages sent by the methods used to check and to fix the database, so 
+that they explain exactly what it does.
 
 More information on the error messages can be found on
 https://github.com/Arthur-Milchior/anki/blob/master/documentation/DB_Check.md
 
-### Checking what anki forgot to check
-There are kind(s) of error(s) that anki does not check. This add-on
-also check and correct those kind of errors. The following error(s)
-are currently considered:
+### Checking what Anki forgot to check
+There are kinds of errors that Anki does not check. This add-on also 
+checks and corrects those kinds of errors. The following error is 
+currently considered:
 
-* Whether you have a note which has two distinct cards for the same
-card type. If this is the case, it keeps the card with greatest
-interval. In case of equality, it keeps the one with greatest
-easyness. In case of equality the one with greates due
-date. Otherwise, an arbitrary card. I explain in [the
+* A note has two distinct cards for the same card type. If this is the 
+case, it keeps the card with the greatest interval. Ties are broken by 
+the one with greatest ease, then the one with the greatest due date, 
+then arbitrarily. I explain in [the
 forum](https://anki.tenderapp.com/discussions/ankidesktop/32854-two-cards-of-the-same-note-with-same-nid#comment_47016398)
 how this could occur without having a single add-on installed.
 * Whether «autoplay» is not set in some deck's option setting. (This
-  occured to me, and I don't know why)
-* whether two notes have the same GUID. See
+  happened to me, and I don't know why.)
+* Whether two notes have the same GUID. See
   https://github.com/Arthur-Milchior/anki-unique-GUID to understand
   why this may occur.
 
@@ -39,10 +37,10 @@ how this could occur without having a single add-on installed.
 ## Warning
 This add-on is incompatible with add-on
 * [12287769](https://ankiweb.net/shared/info/12287769) «Explain
-deletion». This add-on ensure that the file `deleted.txt` state
+deletion». This add-on ensures that the file `deleted.txt` states
 why notes are deleted.
 * [Quicker Anki: 802285486](https://ankiweb.net/shared/info/802285486)
-  which makes some operation quicker.
+  which makes some operations quicker.
 
 
 Please instead use-addon
@@ -51,8 +49,8 @@ those three add-ons
 
 
 With one exception, this add-on does not actually edit the
-database. All editions are done by anki original code. The exception
-being the check which are done by this add-on and not by anki. Right
+database. All editions are done by Anki original code. The exception
+is the checks which are done by this add-on and not by Anki. Right
 now, it's only: checking whether a note has a duplicate card.
 
 ## Internal
@@ -62,7 +60,7 @@ methods:
 everything is ok or whether there is an inconsistency.
 * `fixIntegrity`, the method which is used when clicking on "Check
 Database".
-* `_checkFailed`. The new method explain the problem comes from
+* `_checkFailed`. The new method explains the problem comes from
   the server.
 
 ## Version 2.0
@@ -70,9 +68,9 @@ None
 
 ## TODO
 Use config to allow user to choose to have only one of the two
-functionnality. Allow to choose which card to keep.
+functionality. Allow to choose which card to keep.
 
-Make it compatible with add-on mentionned above.
+Make it compatible with add-on mentioned above.
 
 ## Links, licence and credits
 

@@ -1,15 +1,19 @@
-<b><i>WARNING</i></b> : This add-on is still in beta mode. It is supposed to <i>Fix</i> the database. However, as anything updating the database, it may actually hurt it if there is a bug not yet found. Hence, be sure to have a backup of your collection before running «check media».
+<b><i>WARNING</i></b>: This add-on is still in beta mode. It is supposed to <i>Fix</i> the database. However, as anything updating the database, it may actually hurt it if there is a bug not yet found. Hence, be sure to have a backup of your collection before running «Check Database».
 
 <b>Rationale</b>
-This add-on simultaneously solve two related problems.
+This add-on simultaneously solves two related problems.
 
 <i>Meaningful error message</i>
-Sometime, anki warns you that your database has trouble. That you should run «Check database» to correct it. I find this quite frustrating, because I've no clue what's wrong. And since it may happens many time, I would like to understand what's wrong to avoid repeating the error. This is especially important for add-on developpers, because if our add-ons break the database, it would be better to know exactly how it breaks, so that we can correct this. Hence, this add-on change message sent by the methods used to check and to fix the database, so that it explains exactly what it does.
+Sometime, Anki warns you that your database has trouble and that you should run «Check Database» to correct it. I find this quite frustrating, because I've no clue what's wrong. Since it may happen many times, I would like to understand what's wrong to avoid repeating the error. This is especially important for add-on developers, because if our add-ons break the database, it would be better to know exactly how it broke, so that we can correct this. Hence, this add-on changes messages sent by the methods used to check and to fix the database, so that they explain exactly what it does.
 
-<i>Checking what anki forgot to check</i>
-There are kind(s) of error(s) that anki does not check. This add-on also check and correct those kind of errors. The following error(s) are currently considered:
-<ul><li> Whether you have a note which has two distinct cards for the same card type. If this is the case, it keeps the card with greatest interval. In case of equality, it keeps the one with greatest easyness. In case of equality the one with greates due date. Otherwise, an arbitrary card.
-</li></ul>
+<i>Checking what Anki forgot to check</i>
+There are kinds of errors that Anki does not check. This add-on also checks and corrects those kinds of errors. The following errors are currently considered:
+<ul><li>A note has two distinct cards for the same card type. If this is the case, it keeps the card with the greatest interval. Ties are broken by the one with greatest ease, then the one with the greatest due date, then arbitrarily.</li>
+	<!--
+<li>Whether «autoplay» is not set in some deck's option setting.</li>
+<li>Whether two notes have the same GUID.</li>
+	-->
+</ul>
 
 <b>More</b>
-For more information and to report bug, please go to https://github.com/Arthur-Milchior/anki-database-check-explained
+For more information or to report a bug, please go to https://github.com/Arthur-Milchior/anki-database-check-explained
