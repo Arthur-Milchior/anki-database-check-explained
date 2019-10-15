@@ -1,6 +1,6 @@
 # Database checker/fixer explained, more fixers
 ## Rationale
-This add-on simultaneously solves two related problems.
+This add-on simultaneously solves three related problems.
 
 ### Meaningful error message
 Sometime, Anki warns you that your database has trouble and that you 
@@ -21,14 +21,14 @@ There are kinds of errors that Anki does not check. This add-on also
 checks and corrects those kinds of errors. The following error is 
 currently considered:
 
-* A note has two distinct cards for the same card type. If this is the 
-case, it keeps the card with the greatest interval. Ties are broken by 
-the one with greatest ease, then the one with the greatest due date, 
+* A note has two distinct cards for the same card type. If this is the
+case, it keeps the card with the greatest interval. Ties are broken by
+the one with greatest ease, then the one with the greatest due date,
 then arbitrarily. I explain in [the
 forum](https://anki.tenderapp.com/discussions/ankidesktop/32854-two-cards-of-the-same-note-with-same-nid#comment_47016398)
 how this could occur without having a single add-on installed.
-* Whether «autoplay» is not set in some deck's option setting. (This
-  happened to me, and I don't know why.)
+* Whether there are missing parameters in a deck (standard or
+  dynamic/filtered), or deck option,
 * Whether two notes have the same GUID. See
   https://github.com/Arthur-Milchior/anki-unique-GUID to understand
   why this may occur.

@@ -1,19 +1,8 @@
 <b><i>WARNING</i></b>: This add-on is still in beta mode. It is supposed to <i>Fix</i> the database. However, as anything updating the database, it may actually hurt it if there is a bug not yet found. Hence, be sure to have a backup of your collection before running «Check Database».
 
 <b>Rationale</b>
-This add-on simultaneously solves two related problems.
-
-<i>Meaningful error message</i>
-Sometime, Anki warns you that your database has trouble and that you should run «Check Database» to correct it. I find this quite frustrating, because I've no clue what's wrong. Since it may happen many times, I would like to understand what's wrong to avoid repeating the error. This is especially important for add-on developers, because if our add-ons break the database, it would be better to know exactly how it broke, so that we can correct this. Hence, this add-on changes messages sent by the methods used to check and to fix the database, so that they explain exactly what it does.
-
-<i>Checking what Anki forgot to check</i>
-There are kinds of errors that Anki does not check. This add-on also checks and corrects those kinds of errors. The following errors are currently considered:
-<ul><li>A note has two distinct cards for the same card type. If this is the case, it keeps the card with the greatest interval. Ties are broken by the one with greatest ease, then the one with the greatest due date, then arbitrarily.</li>
-	<!--
-<li>Whether «autoplay» is not set in some deck's option setting.</li>
-<li>Whether two notes have the same GUID.</li>
-	-->
-</ul>
+This add-on simultaneously solves three related problems. Please read
+the exact list on github: https://github.com/Arthur-Milchior/anki-database-check-explained
 
 <b>More</b>
 For more information or to report a bug, please go to https://github.com/Arthur-Milchior/anki-database-check-explained
