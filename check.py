@@ -27,7 +27,7 @@ def basicCheck(self):
          """Note {} has an unexisting note type. Fields: «{}», tags:«{}», mid:{}"""),
         ("""select nid, ord, count(*), GROUP_CONCAT(id) from cards group by ord, nid having count(*)>1""",
          """Note {} has card at ord {} repeated {} times. Card ids are {}"""
-        )
+         )
     ]
     for m in self.models.all():
         # ignore clozes
@@ -38,16 +38,17 @@ def basicCheck(self):
                        "Card {}'s ord {} of note {} does not exists in model {mid}"))
 
     error = False
-    for query,msg in checks:
+    for query, msg in checks:
         l = self.db.all(query)
         for tup in l:
             #print(f"Message is «{msg}», tup = «{tup}»", file = sys.stderr)
             formatted = msg.format(*tup)
-            print(formatted, file = sys.stderr)
+            print(formatted, file=sys.stderr)
             error = True
 
     if error:
         return
     return True
+
 
 _Collection.basicCheck = basicCheck

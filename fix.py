@@ -17,30 +17,36 @@ def integrity(self):
     if self.db.scalar("pragma integrity_check") != "ok":
         return (_("The database containing the collection is corrupt (i.e. pragma integrity_check fails). Please see the manual."), False)
 
+
 def fixOverride(self, problems):
     for m in self.models.all():
         for t in m['tmpls']:
             if t['did'] == "None":
-                problems.append(_("Fixed AnkiDroid deck override bug. (I.e. some template has did = to 'None', it is now None.)"))
+                problems.append(
+                    _("Fixed AnkiDroid deck override bug. (I.e. some template has did = to 'None', it is now None.)"))
+
 
 def template(query, problem, singular, plural):
-    def f(self,problems):
+    def f(self, problems):
         l = self.db.all(query)
         for tup in l:
             problems.append(problem.format(*tup))
         if l:
-             problems.append(ngettext(singular,
-                                       plural, len(l))
-                              % len(l))
+            problems.append(ngettext(singular,
+                                     plural, len(l))
+                            % len(l))
     return f
+
 
 def noteWithMissingModel(self, problems):
     (template(
-        """select id, flds, tags, mid from notes where mid not in """ + ids2str(self.models.ids()),
+        """select id, flds, tags, mid from notes where mid not in """ +
+        ids2str(self.models.ids()),
         "Deleted note {}, with fields «{}», tags «{}» whose model id is {}, which does not exists.",
         "Deleted %d note with missing note type.",
         "Deleted %d notes with missing note type."
     ))(self, problems)
+
 
 def fixInvalidCardOrdinal(self, problems):
     funs = [
@@ -51,7 +57,8 @@ def fixInvalidCardOrdinal(self, problems):
             "Deleted %d cards with missing template.")
         for m in self.models.all() if m['type'] == MODEL_STD]
     for fun in funs:
-        fun(self,problems)
+        fun(self, problems)
+
 
 def fixWrongNumberOfField(self, problems):
     for m in self.models.all():
@@ -64,28 +71,33 @@ def fixWrongNumberOfField(self, problems):
             nbFieldModel = len(m['flds'])
             if nbFieldNote != nbFieldModel:
                 ids.append(id)
-                problems.append(f"""Note {id} with fields «{flds}» has {nbFieldNote} fields while its model {m['name']} has {nbFieldModel} fields""")
+                problems.append(
+                    f"""Note {id} with fields «{flds}» has {nbFieldNote} fields while its model {m['name']} has {nbFieldModel} fields""")
 
 
 def fixNoteWithoutCard(self, problems):
     if getUserOption("Create empty card for empty note"):
-        l = self.db.all("""select id, flds, tags, mid from notes where id not in (select distinct nid from cards)""")
+        l = self.db.all(
+            """select id, flds, tags, mid from notes where id not in (select distinct nid from cards)""")
         for nid, flds, tags, mid in l:
             note = mw.col.getNote(nid)
             note.addTag("NoteWithNoCard")
             note.flush()
             model = note.model()
             template0 = model["tmpls"][0]
-            mw.col._newCard(note,template0,mw.col.nextID("pos"))
-            problems.append("No cards in note {} with fields «{}» and tags «{}» of model {}. Adding card 1 and tag «NoteWithNoCard».".format(nid, fld, tags, mid))
+            mw.col._newCard(note, template0, mw.col.nextID("pos"))
+            problems.append("No cards in note {} with fields «{}» and tags «{}» of model {}. Adding card 1 and tag «NoteWithNoCard».".format(
+                nid, fld, tags, mid))
         if l:
-            problems.append("Created %d cards for notes without card"% (len(l)))
+            problems.append(
+                "Created %d cards for notes without card" % (len(l)))
     else:
-     (template(
-         """select id, flds, tags, mid from notes where id not in (select distinct nid from cards)""",
-         "Deleting note {} with fields «{}» and tags «{}» of model {} because it has no card.",
-         "Deleted %d note with no cards.",
-         "Deleted %d notes with no cards."))(self, problems)
+        (template(
+            """select id, flds, tags, mid from notes where id not in (select distinct nid from cards)""",
+            "Deleting note {} with fields «{}» and tags «{}» of model {} because it has no card.",
+            "Deleted %d note with no cards.",
+            "Deleted %d notes with no cards."))(self, problems)
+
 
 def fixCardWithoutNote(self, problems):
     (template(
@@ -94,12 +106,14 @@ def fixCardWithoutNote(self, problems):
         "Deleted %d card with missing note.",
         "Deleted %d cards with missing note."))(self, problems)
 
+
 def fixOdueType1(self, problems):
-     (template(
-         "select id,nid from cards where odue > 0 and type=1 and not odid",
-         "set odue of card {} of note {} to 0, because it was positive while type was 1 (i.e. card in learning)",
-         "Fixed %d card with invalid properties.",
-         "Fixed %d cards with invalid properties."))(self, problems)
+    (template(
+        "select id,nid from cards where odue > 0 and type=1 and not odid",
+        "set odue of card {} of note {} to 0, because it was positive while type was 1 (i.e. card in learning)",
+        "Fixed %d card with invalid properties.",
+        "Fixed %d cards with invalid properties."))(self, problems)
+
 
 def fixOdueQueue2(self, problems):
     (template(
@@ -107,23 +121,26 @@ def fixOdueQueue2(self, problems):
         "set odue of card {} of note {} to 0, because it was positive while queue was 2 (i.e. in the review queue).",
         "Fixed %d card with invalid properties.",
         "Fixed %d cards with invalid properties.")
-    )(self, problems)
+     )(self, problems)
+
 
 def fixOdidOdue(self, problems):
     (template(
-        """select id, odid, did from cards where odid > 0 and did in %s""" % ids2str([id for id in self.decks.allIds() if not self.decks.isDyn(id)]),# cards with odid set when not in a dyn deck
+        """select id, odid, did from cards where odid > 0 and did in %s""" % ids2str(
+            [id for id in self.decks.allIds() if not self.decks.isDyn(id)]),  # cards with odid set when not in a dyn deck
         "Card {}: Set odid and odue to 0 because odid was {} while its did was {} which is not filtered(a.k.a. not dymanic).",
         "Fixed %d card with invalid properties.",
         "Fixed %d cards with invalid properties.")
-    )(self, problems)
+     )(self, problems)
+
 
 def atMost1000000Due(self, problems):
     # new cards can't have a due position > 32 bits
-    (template ("""select cards, due where due > 1000000 and type = 0""",
-               "Card {}: set due to 1000000 because it was {}, which is far too big for a due card.",
-               "Fixed %d due card with due too big.",
-               "Fixed %d due cards with due too big."
-    ))(self, problems)
+    (template("""select cards, due where due > 1000000 and type = 0""",
+              "Card {}: set due to 1000000 because it was {}, which is far too big for a due card.",
+              "Fixed %d due card with due too big.",
+              "Fixed %d due cards with due too big."
+              ))(self, problems)
 
 
 def setNextPos(self):
@@ -131,8 +148,9 @@ def setNextPos(self):
     self.conf['nextPos'] = self.db.scalar(
         "select max(due)+1 from cards where type = 0") or 0
 
+
 def reasonableRevueDue(self, problems):
-    (template(# reviews should have a reasonable due #
+    (template(  # reviews should have a reasonable due #
         "select id, due from cards where queue = 2 and due > 100000",
         "Changue  of card {}, because its due is {} which is excessive",
         "Reviews had incorrect due date.",
@@ -141,6 +159,8 @@ def reasonableRevueDue(self, problems):
     )(self, problems)
 
 # v2 sched had a bug that could create decimal intervals
+
+
 def fixFloatIvl(self, problems):
     (template(
         "select id, ivl from cards where ivl != round(ivl)",
@@ -150,42 +170,53 @@ def fixFloatIvl(self, problems):
     )
     )(self, problems)
 
+
 def fixFloatDue(self, problems):
     (template(
-    "select id, due from cards where due != round(due)",
-    "Round the due of card {} because it was {} (this is a known bug of schedule v2.",
-    "Fixed %d cards with v2 scheduler bug.",
-    "Fixed %d cards with v2 scheduler bug."))(self, problems)
+        "select id, due from cards where due != round(due)",
+        "Round the due of card {} because it was {} (this is a known bug of schedule v2.",
+        "Fixed %d cards with v2 scheduler bug.",
+        "Fixed %d cards with v2 scheduler bug."))(self, problems)
+
 
 def doubleCard(self, problems):
-    l = self.db.all("""select nid, ord, count(*), GROUP_CONCAT(id) from cards group by ord, nid having count(*)>1""")
+    l = self.db.all(
+        """select nid, ord, count(*), GROUP_CONCAT(id) from cards group by ord, nid having count(*)>1""")
     toRemove = []
     for nid, ord, count, ids in l:
         ids = ids.split(",")
         ids = [int(id) for id in ids]
-        cards = [Card(self,id) for id in ids]
-        bestCard = max(cards, key = (lambda card: (card.ivl, card.factor, card.due)))
+        cards = [Card(self, id) for id in ids]
+        bestCard = max(cards, key=(lambda card: (
+            card.ivl, card.factor, card.due)))
         bestId = bestCard.id
-        problems.append(f"There are {count} card for note {nid} at ord {ord}. They are {ids}. We only keep {bestId}")
-        toRemove += [id for id in ids  if id!= bestId]
+        problems.append(
+            f"There are {count} card for note {nid} at ord {ord}. They are {ids}. We only keep {bestId}")
+        toRemove += [id for id in ids if id != bestId]
     if toRemove:
         self.remCards(toRemove)
+
 
 def checkDeck(self, problems):
     """check that all default confs/decks option are set in all deck's related object"""
     dynDecks = [deck for deck in self.decks.all() if deck['dyn']]
     standardDecks = [deck for deck in self.decks.all() if not deck['dyn']]
     for paramsSet, defaultParam, what, kind in [(self.decks.dconf.values(), defaultDeckConf, "'s option", "deck configuration"),
-                                                (standardDecks, defaultDeck, "", "standard deck"),
-                                                (dynDecks, defaultDynamicDeck, " (dynamic)", "dynamic deck"),
-                                                (dynDecks, defaultDeckConf, " (dynamic)", "dynamic deck as conf"),
-    ]:
+                                                (standardDecks, defaultDeck,
+                                                 "", "standard deck"),
+                                                (dynDecks, defaultDynamicDeck,
+                                                 " (dynamic)", "dynamic deck"),
+                                                (dynDecks, defaultDeckConf,
+                                                 " (dynamic)", "dynamic deck as conf"),
+                                                ]:
         for key in defaultParam:
             for params in paramsSet:
                 if key not in params:
                     params[key] = defaultParam[key]
                     self.decks.save(params)
-                    problems.append(f"Adding some «{key}» which was missing in deck{what} {params['name']}")
+                    problems.append(
+                        f"Adding some «{key}» which was missing in deck{what} {params['name']}")
+
 
 def uniqueGuid(self, problems):
     lastGuid = None
@@ -193,19 +224,24 @@ def uniqueGuid(self, problems):
     lastNid = None
     for guid, nid in mw.col.db.all("select guid, id from notes order by guid"):
         if lastGuid == guid:
-            mw.col.db.execute("update notes set guid = ? where id = ? ", guid64(), nid)
-            nids.append((nid,lastNid))
-            problems.append(f"The guid of note {nid} has been changed because it used to be the guid of note {lastNid}")
+            mw.col.db.execute(
+                "update notes set guid = ? where id = ? ", guid64(), nid)
+            nids.append((nid, lastNid))
+            problems.append(
+                f"The guid of note {nid} has been changed because it used to be the guid of note {lastNid}")
         lastGuid = guid
         lastNid = nid
 
 
 oldFixIntegrity = _Collection.fixIntegrity
+
+
 def fixIntegrity(self):
     """Find the problems which will be found. Then call last fixing."""
     problems = []
     self.save()
-    ret = integrity(self)#If the database itself is broken, there is nothing else to do.
+    # If the database itself is broken, there is nothing else to do.
+    ret = integrity(self)
     if ret:
         return ret
 
@@ -224,8 +260,8 @@ def fixIntegrity(self):
                 doubleCard,
                 checkDeck,
                 uniqueGuid,
-    ]:
-        fun(self,problems)
+                ]:
+        fun(self, problems)
     # tags
     # self.tags.registerNotes()
     # # field cache
@@ -235,5 +271,6 @@ def fixIntegrity(self):
     oldProblems, ok = oldFixIntegrity(self)
     problems.append(oldProblems)
     return ("\n".join(problems), ok)
+
 
 _Collection.fixIntegrity = fixIntegrity
