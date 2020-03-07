@@ -41,7 +41,6 @@ def basicCheck(self):
     for query, msg in checks:
         l = self.db.all(query)
         for tup in l:
-            #print(f"Message is «{msg}», tup = «{tup}»", file = sys.stderr)
             formatted = msg.format(*tup)
             print(formatted, file=sys.stderr)
             error = True
