@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Check database Explain errors and what is done to fix it",
+  "properties": {
+    "Create empty card for empty note": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}
